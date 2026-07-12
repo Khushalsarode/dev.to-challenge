@@ -1,0 +1,56 @@
+export const VESSELS = {
+  wine: {
+    key: 'wine',
+    label: '🍷 Age it in wine',
+    bg: '#1A1209',
+    parchment: '#F2E8D5',
+    primary: '#6B1A2A',
+    accentUi: '#B87333',
+    ink: '#2C1810',
+    vesselBody: '#1C3A2B',
+    gold: '#D4AF37',
+    titleFont: "'Cormorant Garamond'",
+    verb: 'uncorked',
+    emoji: '🍷',
+    fields: {
+      title: 'chateau', subtitle: 'domain', year: 'vintage', body: 'tasting_notes',
+      tag: 'rarity', extra: 'pairing', closer: 'collectors_note',
+      labels: { body: 'TASTING NOTES', tag: 'RARITY', extra: 'PAIRS WITH', closer: "COLLECTOR'S NOTE" },
+      yearPrefix: 'VINTAGE',
+    },
+    loadingCopy: [
+      'Selecting your terroir…',
+      'Ageing your passion underground…',
+      'Consulting the Grand Cru committee…',
+      'Applying the wax seal…',
+    ],
+  },
+  fire: {
+    key: 'fire',
+    label: '🔥 Forge it',
+    bg: '#1A1512',
+    parchment: '#C9BFB5',
+    primary: '#E8531C',
+    accentUi: '#FF8A3D',
+    ink: '#3D3835',
+    vesselBody: '#2A2622',
+    gold: '#FF8A3D',
+    titleFont: "'Cinzel'",
+    verb: 'forged',
+    emoji: '🔥',
+    fields: {
+      title: 'forge_name', subtitle: 'smith_title', year: 'year_forged', body: 'temper_notes',
+      tag: 'intensity', extra: 'tempered_with', closer: 'smiths_mark',
+      labels: { body: 'TEMPER NOTES', tag: 'INTENSITY', extra: 'TEMPERED WITH', closer: "SMITH'S MARK" },
+      yearPrefix: 'FORGED',
+    },
+    loadingCopy: [
+      'Stoking the forge…',
+      'Tempering your passion in the coals…',
+      'Consulting the Order of the Anvil…',
+      'Striking the mark…',
+    ],
+  },
+};
+
+export const PASSION_CHIPS = ['football', 'photography', 'coding', 'cooking', 'music'];
