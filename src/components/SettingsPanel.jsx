@@ -87,7 +87,7 @@ function SettingsPanel({ open, onClose, vessel }) {
       </Row>
 
       {(['wine', 'fire']).map((ves) => (
-        <Row key={ves} label={`${ves === 'wine' ? '🍷 Wine' : '🔥 Fire'} narrator`}>
+        <Row key={ves} label={`${VESSELS[ves].shortLabel} narrator`}>
           <select
             value={settings.voiceId[ves] || ''}
             onChange={(e) => updateSettings({ voiceId: { ...settings.voiceId, [ves]: e.target.value || null } })}
@@ -149,7 +149,7 @@ function SettingsPanel({ open, onClose, vessel }) {
           textColor={v.parchment}
           value={settings.tone}
           onChange={(val) => updateSettings({ tone: val })}
-          options={[{ value: 'classy', label: 'Classy' }, { value: 'sassy', label: 'Sassy 🔥' }]}
+          options={[{ value: 'classy', label: 'Classy' }, { value: 'sassy', label: 'Sassy' }]}
         />
       </Row>
 

@@ -5,6 +5,7 @@ import ResultScreen from './components/ResultScreen';
 import NavBar from './components/NavBar';
 import SettingsPanel from './components/SettingsPanel';
 import GalleryPanel from './components/GalleryPanel';
+import MoodBackground from './components/MoodBackground';
 import { generateLabelData } from './services/gemini';
 import { generateVoiceAudio } from './services/elevenlabs';
 import { generateBackgroundArt, generateVesselPhoto } from './services/imagegen';
@@ -15,6 +16,14 @@ import { useLocalStorageState } from './utils/useLocalStorageState';
 import { startAmbient, setAmbientVolume, getCurrentAmbientVessel } from './services/ambientSound';
 
 const GALLERY_CAP = 20;
+
+function resolveVibeIntensity(phase, previewVessel, vessel) {
+  if (phase === 'loading') return 'loading';
+  if (phase === 'result') return 'result';
+  if (previewVessel) return 'hover';
+  if (vessel && phase === 'landing') return 'selected';
+  return 'idle';
+}
 
 function classifyError(err) {
   const msg = err.message || '';
@@ -42,6 +51,7 @@ function App() {
 
   const reducedMotion = settings.motionIntensity === 'reduced';
   const activeVessel = vessel || previewVessel || 'wine';
+  const vibeIntensity = resolveVibeIntensity(phase, previewVessel, vessel);
 
   // Crossfade the ambient loop whenever the active vessel changes (vessel
   // pick, hover preview, submit) — only once the user has unmuted, since
@@ -193,12 +203,26 @@ function App() {
         error={error}
         previewVessel={previewVessel}
         setPreviewVessel={setPreviewVessel}
+        reducedMotion={reducedMotion}
       />
     );
   }
 
   return (
-    <div data-motion={reducedMotion ? 'reduced' : 'full'}>
+    <div
+      data-motion={reducedMotion ? 'reduced' : 'full'}
+      className="app-shell"
+      data-vessel={activeVessel}
+      data-vibe={vibeIntensity}
+      data-phase={phase}
+    >
+      <MoodBackground
+        vessel={activeVessel}
+        intensity={vibeIntensity}
+        reducedMotion={reducedMotion}
+        global
+      />
+
       <NavBar
         vessel={vessel || previewVessel}
         onReset={handleReset}
@@ -207,7 +231,7 @@ function App() {
         galleryCount={gallery.length}
       />
 
-      <div style={{ paddingTop: 56 }}>
+      <div className="app-content">
         <div key={phase} className={reducedMotion ? '' : 'phase-fade'}>
           {content}
         </div>

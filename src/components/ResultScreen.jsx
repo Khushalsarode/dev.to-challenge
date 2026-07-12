@@ -2,9 +2,9 @@ import { useEffect, useRef } from 'react';
 import { VESSELS } from '../config/vessels';
 import { getAccentColor } from '../utils/colorMood';
 import { useTilt } from '../hooks/useTilt';
-import VesselBottle from './VesselBottle';
 import Label from './Label';
 import Controls from './Controls';
+import VesselShowcase from './VesselShowcase';
 
 function ResultScreen({
   vessel, passion, labelData, audioUrl, backgroundImage, vesselPhoto,
@@ -12,8 +12,9 @@ function ResultScreen({
   reducedMotion = false, onReset,
 }) {
   const v = VESSELS[vessel];
+  const compositeRef = useRef(null);
   const labelRef = useRef(null);
-  const { ref: tiltRef, handleMouseMove, handleMouseLeave } = useTilt({ max: 8, disabled: reducedMotion });
+  const { ref: tiltRef, handleMouseMove, handleMouseLeave } = useTilt({ max: 14, disabled: reducedMotion });
 
   const mood = accentOverride !== 'auto' ? accentOverride : labelData.color_mood;
   const accentColor = getAccentColor(vessel, mood);
@@ -21,90 +22,64 @@ function ResultScreen({
   useEffect(() => {
     if (!audioUrl || !narrationEnabled) return;
     const audio = new Audio(audioUrl);
-    audio.volume = volume; // Quiet auto-play — never jarring
-    audio.play().catch(() => {}); // Silently swallow autoplay-policy errors; button still works
+    audio.volume = volume;
+    audio.play().catch(() => {});
   }, [audioUrl, narrationEnabled, volume]);
 
-  return (
+  const labelNode = (
     <div
-      style={{
-        minHeight: 'calc(100vh - 56px)',
-        background: v.bg,
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
-        padding: '32px 16px',
-        gap: 24,
-      }}
+      ref={(el) => { labelRef.current = el; tiltRef.current = el; }}
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+      className="artifact-label tilt-container artifact-label--result"
     >
-      <p
-        style={{
-          fontFamily: "'Cormorant Garamond'",
-          fontStyle: 'italic',
-          fontSize: 20,
-          color: v.parchment,
-          textAlign: 'center',
-          margin: 0,
-        }}
-      >
-        Your {vessel === 'wine' ? 'vintage' : 'forge mark'} of: <strong>{passion}</strong>
-      </p>
+      <Label
+        vessel={vessel}
+        labelData={labelData}
+        accentOverride={accentOverride}
+        backgroundImage={backgroundImage}
+      />
+    </div>
+  );
 
-      <div
-        className="result-layout"
-        style={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          gap: 24,
-          flexWrap: 'wrap',
-        }}
-      >
-        <div className="vessel-silhouette" style={{ display: 'none' }}>
-          {vesselPhoto ? (
+  return (
+    <div className={`screen-result screen-overlay screen-result--${vessel}`}>
+      <div className="screen-result-content">
+        <p className="result-headline" style={{ color: v.parchment }}>
+          Your {vessel === 'wine' ? 'vintage' : 'forge mark'} of: <strong>{passion}</strong>
+        </p>
+
+        <div ref={compositeRef} className="artifact-composite artifact-composite--with-vessels">
+          {vesselPhoto && (
             <img
               src={vesselPhoto}
               alt={vessel === 'wine' ? 'AI-generated photograph of the wine bottle' : 'AI-generated photograph of the forge mark'}
-              className={reducedMotion ? '' : 'label-card'}
-              style={{ width: 220, height: 'auto', maxHeight: 460, objectFit: 'cover', boxShadow: `0 12px 40px ${accentColor}33` }}
-            />
-          ) : (
-            <VesselBottle
-              vessel={vessel}
-              accentColor={accentColor}
-              intensityText={vessel === 'fire' ? labelData.intensity : undefined}
-              reveal
-              reducedMotion={reducedMotion}
+              className="artifact-ai-photo artifact-ai-photo--banner"
+              style={{ boxShadow: `0 16px 48px ${accentColor}44` }}
             />
           )}
+
+          <VesselShowcase
+            variant="result"
+            activeVessel={vessel}
+            accentColor={v.accentUi}
+            parchment={v.parchment}
+            reducedMotion={reducedMotion}
+            centerContent={labelNode}
+          />
         </div>
-        <div
-          ref={(el) => { labelRef.current = el; tiltRef.current = el; }}
-          onMouseMove={handleMouseMove}
-          onMouseLeave={handleMouseLeave}
-          className="tilt-container"
-          style={{ width: 'min(88vw, 340px)' }}
-        >
-          <Label vessel={vessel} labelData={labelData} accentOverride={accentOverride} backgroundImage={backgroundImage} />
-        </div>
+
+        <Controls
+          vessel={vessel}
+          passion={passion}
+          labelData={labelData}
+          audioUrl={narrationEnabled ? audioUrl : null}
+          volume={volume}
+          labelRef={labelRef}
+          compositeRef={compositeRef}
+          onReset={onReset}
+        />
       </div>
-
-      <Controls
-        vessel={vessel}
-        passion={passion}
-        labelData={labelData}
-        audioUrl={narrationEnabled ? audioUrl : null}
-        volume={volume}
-        labelRef={labelRef}
-        onReset={onReset}
-      />
-
-      <style>{`
-        @media (min-width: 900px) {
-          .vessel-silhouette { display: block !important; }
-        }
-      `}</style>
     </div>
   );
 }

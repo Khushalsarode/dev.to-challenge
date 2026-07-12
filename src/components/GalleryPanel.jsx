@@ -1,5 +1,6 @@
 import Drawer from './Drawer';
 import { VESSELS } from '../config/vessels';
+import { WineBadge, FireBadge } from './icons/Icons';
 
 function GalleryPanel({ open, onClose, vessel, entries, onSelect, onDelete, onClearAll }) {
   const v = VESSELS[vessel || 'wine'];
@@ -14,7 +15,7 @@ function GalleryPanel({ open, onClose, vessel, entries, onSelect, onDelete, onCl
       textColor={v.parchment}
     >
       {entries.length === 0 ? (
-        <p style={{ fontFamily: 'EB Garamond', fontStyle: 'italic', opacity: 0.6 }}>
+        <p style={{ fontFamily: 'EB Garamond', fontStyle: 'italic', opacity: 0.6, fontSize: 15 }}>
           Nothing here yet — generated labels are saved automatically.
         </p>
       ) : (
@@ -27,29 +28,48 @@ function GalleryPanel({ open, onClose, vessel, entries, onSelect, onDelete, onCl
               <div
                 key={entry.id}
                 style={{
-                  display: 'flex', alignItems: 'center', gap: 10,
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 12,
                   border: `1px solid ${entry.accentColor}55`,
-                  padding: '8px 10px', marginBottom: 8, cursor: 'pointer',
+                  padding: '10px 12px',
+                  marginBottom: 8,
+                  cursor: 'pointer',
                 }}
                 onClick={() => onSelect(entry)}
               >
-                <span style={{ fontSize: 18 }}>{ev.emoji}</span>
+                {entry.vessel === 'wine' ? (
+                  <WineBadge size={22} color={entry.accentColor} />
+                ) : (
+                  <FireBadge size={22} color={entry.accentColor} />
+                )}
                 <div style={{ flex: 1, minWidth: 0 }}>
-                  <div style={{
-                    fontFamily: "'Cormorant Garamond'", fontStyle: 'italic', fontSize: 14,
-                    color: entry.accentColor, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis',
-                  }}>
+                  <div
+                    style={{
+                      fontFamily: "'Cormorant Garamond'",
+                      fontStyle: 'italic',
+                      fontSize: 16,
+                      color: entry.accentColor,
+                      whiteSpace: 'nowrap',
+                      overflow: 'hidden',
+                      textOverflow: 'ellipsis',
+                    }}
+                  >
                     {title}
                   </div>
-                  <div style={{ fontFamily: 'Inter', fontSize: 10, opacity: 0.5 }}>{entry.passion}</div>
+                  <div style={{ fontFamily: 'Inter', fontSize: 12, opacity: 0.5 }}>{entry.passion}</div>
                 </div>
                 <button
                   type="button"
                   onClick={(e) => { e.stopPropagation(); onDelete(entry.id); }}
                   aria-label={`Delete ${title}`}
                   style={{
-                    background: 'transparent', border: 'none', color: v.parchment, opacity: 0.5,
-                    fontSize: 14, padding: 4,
+                    background: 'transparent',
+                    border: 'none',
+                    color: v.parchment,
+                    opacity: 0.5,
+                    fontSize: 18,
+                    padding: 4,
                   }}
                 >
                   ×
@@ -61,8 +81,14 @@ function GalleryPanel({ open, onClose, vessel, entries, onSelect, onDelete, onCl
             type="button"
             onClick={onClearAll}
             style={{
-              width: '100%', marginTop: 8, padding: '8px', fontFamily: 'Inter', fontSize: 12,
-              background: 'transparent', color: v.parchment, opacity: 0.6,
+              width: '100%',
+              marginTop: 8,
+              padding: '10px',
+              fontFamily: 'Inter',
+              fontSize: 13,
+              background: 'transparent',
+              color: v.parchment,
+              opacity: 0.6,
               border: `1px solid ${v.accentUi}33`,
             }}
           >

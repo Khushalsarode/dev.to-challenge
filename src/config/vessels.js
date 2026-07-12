@@ -1,7 +1,9 @@
 export const VESSELS = {
   wine: {
     key: 'wine',
-    label: '🍷 Age it in wine',
+    label: 'Age it in wine',
+    ctaSubtitle: 'Devotion & depth',
+    shortLabel: 'Wine',
     bg: '#1A1209',
     parchment: '#F2E8D5',
     primary: '#6B1A2A',
@@ -11,7 +13,6 @@ export const VESSELS = {
     gold: '#D4AF37',
     titleFont: "'Cormorant Garamond'",
     verb: 'uncorked',
-    emoji: '🍷',
     fields: {
       title: 'chateau', subtitle: 'domain', year: 'vintage', body: 'tasting_notes',
       tag: 'rarity', extra: 'pairing', closer: 'collectors_note',
@@ -27,7 +28,9 @@ export const VESSELS = {
   },
   fire: {
     key: 'fire',
-    label: '🔥 Forge it',
+    label: 'Forge it',
+    ctaSubtitle: 'Intensity & edge',
+    shortLabel: 'Fire',
     bg: '#1A1512',
     parchment: '#C9BFB5',
     primary: '#E8531C',
@@ -37,7 +40,6 @@ export const VESSELS = {
     gold: '#FF8A3D',
     titleFont: "'Cinzel'",
     verb: 'forged',
-    emoji: '🔥',
     fields: {
       title: 'forge_name', subtitle: 'smith_title', year: 'year_forged', body: 'temper_notes',
       tag: 'intensity', extra: 'tempered_with', closer: 'smiths_mark',

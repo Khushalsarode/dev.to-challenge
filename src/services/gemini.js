@@ -83,7 +83,7 @@ async function requestLabelData(passion, vessel, { temperature = 1.1, tone = 'cl
   const systemInstructions = SYSTEM_INSTRUCTIONS_BY_TONE[tone] || CLASSY_SYSTEM_INSTRUCTIONS;
 
   const response = await ai.models.generateContent({
-    model: 'gemini-2.5-flash',
+    model: 'gemini-3.5-flash',
     contents: buildPrompt(passion, vessel),
     config: {
       systemInstruction: systemInstructions[vessel],

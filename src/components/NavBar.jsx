@@ -1,6 +1,8 @@
 import { VESSELS } from '../config/vessels';
 import { useSettings } from '../context/SettingsContext';
 import { startAmbient, stopAmbient } from '../services/ambientSound';
+import BrandMark from './icons/BrandMark';
+import { IconVolume, IconVolumeOff, IconGallery, IconSettings } from './icons/Icons';
 
 function NavBar({ vessel, onReset, onOpenSettings, onOpenGallery, galleryCount }) {
   const { settings, updateSettings } = useSettings();
@@ -23,10 +25,9 @@ function NavBar({ vessel, onReset, onOpenSettings, onOpenGallery, galleryCount }
     background: 'transparent',
     border: `1px solid ${accent}55`,
     color: textColor,
-    width: 36,
-    height: 36,
+    width: 40,
+    height: 40,
     borderRadius: 0,
-    fontSize: 15,
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
@@ -45,9 +46,9 @@ function NavBar({ vessel, onReset, onOpenSettings, onOpenGallery, galleryCount }
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
-        padding: '0 16px',
+        padding: '0 18px',
         background: bg,
-        backdropFilter: 'blur(6px)',
+        backdropFilter: 'blur(8px)',
         borderBottom: `1px solid ${accent}33`,
         transition: 'background 0.4s ease',
       }}
@@ -63,13 +64,13 @@ function NavBar({ vessel, onReset, onOpenSettings, onOpenGallery, galleryCount }
           fontFamily: "'Cormorant Garamond'",
           fontStyle: 'italic',
           fontWeight: 700,
-          fontSize: 18,
+          fontSize: 20,
           display: 'flex',
           alignItems: 'center',
-          gap: 8,
+          gap: 10,
         }}
       >
-        <span aria-hidden="true">🍷🔥</span>
+        <BrandMark size={32} wineColor={accent} fireColor={VESSELS.fire.accentUi} />
         Passion Uncorked
       </button>
 
@@ -81,18 +82,27 @@ function NavBar({ vessel, onReset, onOpenSettings, onOpenGallery, galleryCount }
           aria-pressed={!settings.ambientMuted}
           style={iconButtonStyle}
         >
-          {settings.ambientMuted ? '🔇' : '🔊'}
+          {settings.ambientMuted ? <IconVolumeOff /> : <IconVolume />}
         </button>
         <button type="button" onClick={onOpenGallery} aria-label="Open gallery" style={iconButtonStyle}>
-          🖼
+          <IconGallery />
           {galleryCount > 0 && (
             <span
               style={{
-                position: 'absolute', top: -6, right: -6,
-                background: accent, color: v ? v.bg : '#1A1209',
-                borderRadius: '50%', width: 16, height: 16,
-                fontSize: 9, display: 'flex', alignItems: 'center', justifyContent: 'center',
+                position: 'absolute',
+                top: -6,
+                right: -6,
+                background: accent,
+                color: v ? v.bg : '#1A1209',
+                borderRadius: '50%',
+                width: 18,
+                height: 18,
+                fontSize: 10,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
                 fontFamily: 'Inter',
+                fontWeight: 600,
               }}
             >
               {galleryCount > 9 ? '9+' : galleryCount}
@@ -100,7 +110,7 @@ function NavBar({ vessel, onReset, onOpenSettings, onOpenGallery, galleryCount }
           )}
         </button>
         <button type="button" onClick={onOpenSettings} aria-label="Open settings" style={iconButtonStyle}>
-          ⚙
+          <IconSettings />
         </button>
       </div>
     </nav>
