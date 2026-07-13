@@ -3,3 +3,4 @@ dist
 .env
 .env.local
 *.log
+public/demo-video.mp4

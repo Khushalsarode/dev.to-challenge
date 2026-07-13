@@ -10,7 +10,7 @@
 </p>
 
 <p align="center">
-  <a href="https://passion-uncorked.pages.dev">
+  <a href="passion-uncorked.khushalsarode-in.workers.dev">
     <img src="./public/demo.gif" alt="Passion Uncorked — type a passion, pick wine or fire, get a narrated label" width="920" />
   </a>
 </p>
