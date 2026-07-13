@@ -17,7 +17,7 @@
 
 <p align="center">
   <strong>Type any passion → age it in wine or forge it in fire → a one-of-a-kind, narrated artifact in under 30 seconds.</strong><br />
-  <a href="https://passion-uncorked.pages.dev](https://passion-uncorked.khushalsarode-in.workers.dev"><strong>Live demo →</strong></a> · Gemini-written copy · ElevenLabs narration · original browser-synthesized score
+  <a href="https://passion-uncorked.khushalsarode-in.workers.dev"><strong>Live demo →</strong></a> · Gemini-written copy · ElevenLabs narration · original browser-synthesized score
 </p>
 
 ---
