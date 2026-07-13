@@ -52,6 +52,9 @@ function App() {
   const reducedMotion = settings.motionIntensity === 'reduced';
   const activeVessel = vessel || previewVessel || 'wine';
   const vibeIntensity = resolveVibeIntensity(phase, previewVessel, vessel);
+  const resultMoodColor = phase === 'result' && labelData
+    ? getAccentColor(vessel, settings.accentOverride !== 'auto' ? settings.accentOverride : labelData.color_mood)
+    : null;
 
   // Crossfade the ambient loop whenever the active vessel changes (vessel
   // pick, hover preview, submit) — only once the user has unmuted, since
@@ -220,6 +223,7 @@ function App() {
         vessel={activeVessel}
         intensity={vibeIntensity}
         reducedMotion={reducedMotion}
+        moodColor={resultMoodColor}
         global
       />
 

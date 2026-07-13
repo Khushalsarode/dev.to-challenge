@@ -55,4 +55,10 @@ export const VESSELS = {
   },
 };
 
-export const PASSION_CHIPS = ['football', 'photography', 'coding', 'cooking', 'music'];
+export const PASSION_CHIPS = [
+  'football',
+  'photography at golden hour',
+  'late-night coding sessions',
+  'cooking for people I love',
+  'music',
+];

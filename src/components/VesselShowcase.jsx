@@ -6,11 +6,13 @@ import SketchfabCredit from './vessel3d/SketchfabCredit';
 function VesselShowcase({
   highlightVessel = null,
   accentColor,
+  moodTint = null,
   parchment,
   reducedMotion = false,
   variant = 'landing',
   activeVessel = null,
   centerContent = null,
+  resultVisual = null,
 }) {
   const containerRef = useRef(null);
   const winePanelRef = useRef(null);
@@ -103,7 +105,15 @@ function VesselShowcase({
       ref={winePanelRef}
       className={`vessel-showcase-panel vessel-showcase-panel--wine ${emphasizedVessel === 'wine' ? 'is-active' : ''}`}
     >
-      <SketchfabFrame vessel="wine" compact={isResult} />
+      {isResult && activeVessel === 'wine' && resultVisual ? (
+        <div className="vessel-showcase-illustration">{resultVisual}</div>
+      ) : (
+        <SketchfabFrame
+          vessel="wine"
+          compact={isResult}
+          tint={isResult && emphasizedVessel === 'wine' ? moodTint : null}
+        />
+      )}
       {!isResult && (
         <div className="vessel-showcase-label" style={{ color: parchment }}>
           <span className="vessel-showcase-label-title">Age in wine</span>
@@ -119,7 +129,15 @@ function VesselShowcase({
       ref={firePanelRef}
       className={`vessel-showcase-panel vessel-showcase-panel--fire ${emphasizedVessel === 'fire' ? 'is-active' : ''}`}
     >
-      <SketchfabFrame vessel="fire" compact={isResult} />
+      {isResult && activeVessel === 'fire' && resultVisual ? (
+        <div className="vessel-showcase-illustration">{resultVisual}</div>
+      ) : (
+        <SketchfabFrame
+          vessel="fire"
+          compact={isResult}
+          tint={isResult && emphasizedVessel === 'fire' ? moodTint : null}
+        />
+      )}
       {!isResult && (
         <div className="vessel-showcase-label" style={{ color: parchment }}>
           <span className="vessel-showcase-label-title">Forge in fire</span>

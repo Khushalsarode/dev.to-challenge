@@ -8,7 +8,7 @@ const PARTICLE_COUNTS = {
   selected: { wine: 45, fire: 55 },
 };
 
-function MoodBackground({ vessel, intensity = 'idle', reducedMotion = false, global = false }) {
+function MoodBackground({ vessel, intensity = 'idle', reducedMotion = false, global = false, moodColor = null }) {
   const canvasRef = useRef(null);
   const isWine = vessel === 'wine';
   const counts = PARTICLE_COUNTS[intensity] || PARTICLE_COUNTS.idle;
@@ -116,6 +116,13 @@ function MoodBackground({ vessel, intensity = 'idle', reducedMotion = false, glo
     >
       <div className="mood-base-gradient" />
       <div className="mood-color-wash" />
+      {moodColor && (
+        <div
+          className="mood-generation-tint"
+          style={{ background: `radial-gradient(ellipse at 50% 35%, ${moodColor}55, transparent 70%)` }}
+          aria-hidden="true"
+        />
+      )}
       <div className="mood-light-pool mood-light-pool--a" />
       <div className="mood-light-pool mood-light-pool--b" />
       <div className="mood-light-pool mood-light-pool--c" />

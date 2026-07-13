@@ -489,6 +489,17 @@ input {
   z-index: 0;
 }
 
+/* Extra wash tinted by the current generation's actual color_mood (or manual
+   override) — layered on top of the vessel-only background so results feel
+   distinct from each other, not just from the other vessel. */
+.mood-generation-tint {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  mix-blend-mode: screen;
+  transition: background 0.8s ease;
+}
+
 .mood-background--global {
   position: fixed;
   inset: 0;
@@ -1435,6 +1446,20 @@ input {
   display: block;
 }
 
+.vessel-showcase-illustration {
+  height: clamp(180px, 28vw, 240px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  filter: drop-shadow(0 16px 28px rgba(0, 0, 0, 0.5));
+}
+
+.vessel-showcase-illustration svg {
+  height: 100%;
+  width: auto;
+  max-width: 100%;
+}
+
 .sketchfab-frame--compact {
   height: clamp(180px, 28vw, 240px);
 }
@@ -1559,15 +1584,12 @@ input {
 }
 
 .sketchfab-frame-viewport {
+  /* Just a position/size reference tracked by sketchfabIframeCache.js — the
+     actual iframe lives in a permanent fixed-position layer elsewhere in the
+     DOM (never reparented, to avoid Chromium reloading it) and applies its
+     own oversize-and-crop math relative to this rect. */
   position: absolute;
-  inset: -10% -14% -18% -14%;
-}
-
-.sketchfab-frame-viewport iframe {
-  width: 100%;
-  height: 100%;
-  border: none;
-  background: transparent;
+  inset: 0;
 }
 
 .sketchfab-frame-mask {
@@ -1838,6 +1860,25 @@ nav {
   flex-wrap: wrap;
 }
 
+.passion-chip {
+  padding: 7px 14px;
+  font-family: Inter, sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.3;
+  background: rgba(0, 0, 0, 0.22);
+  border-width: 1px;
+  border-style: solid;
+  border-radius: 3px;
+  opacity: 0.7;
+  transition: opacity 0.2s ease, background 0.2s ease, transform 0.15s ease;
+}
+
+.passion-chip:hover {
+  background: rgba(0, 0, 0, 0.4);
+  transform: translateY(-1px);
+}
+
 .landing-copy {
   padding: 20px 24px;
   background: rgba(0, 0, 0, 0.28);
@@ -1871,13 +1912,34 @@ nav {
   border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
-.result-headline {
+.result-headline-block {
+  text-align: center;
+}
+
+.result-eyebrow {
+  margin: 0 0 6px;
+  font-family: Inter, sans-serif;
+  font-size: clamp(11px, 2.2vw, 13px);
+  font-weight: 600;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+}
+
+.result-title {
+  margin: 0;
   font-family: 'Cormorant Garamond', serif;
   font-style: italic;
-  font-size: clamp(22px, 4vw, 28px);
-  text-align: center;
-  margin: 0;
-  text-shadow: 0 2px 24px rgba(0, 0, 0, 0.55);
+  font-weight: 700;
+  font-size: clamp(30px, 6vw, 48px);
+  line-height: 1.1;
+  text-shadow: 0 2px 28px rgba(0, 0, 0, 0.55);
+}
+
+.screen-result--fire .result-title {
+  font-family: Cinzel, serif;
+  font-style: normal;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
 }
 
 @media (max-width: 768px) {
@@ -2152,4 +2214,362 @@ nav {
   .sketchfab-hint {
     animation: none !important;
   }
+}
+
+/* ---------- Certificate (Label) — HTML/CSS card ---------- */
+/* Replaces the old pure-SVG label: SVG text can't wrap or auto-size, which
+   is exactly why long château/forge names were overflowing the card edge
+   and the seal was overlapping the closing note. Flexbox/CSS text flow
+   handles both correctly, and container queries (cqw) size the title
+   relative to the card's own width, not the viewport. */
+
+.certificate {
+  container-type: inline-size;
+  position: relative;
+  width: 100%;
+  padding: 3px;
+  background: linear-gradient(155deg,
+    var(--cert-accent) 0%,
+    color-mix(in srgb, var(--cert-accent) 35%, transparent) 45%,
+    var(--cert-accent) 100%);
+  box-shadow:
+    0 28px 56px -14px rgba(0, 0, 0, 0.55),
+    0 10px 22px -8px rgba(0, 0, 0, 0.4);
+}
+
+.certificate--wine { border-radius: 5px; }
+.certificate--fire { border-radius: 0; }
+
+.certificate-inner {
+  position: relative;
+  padding: clamp(20px, 6.5cqw, 34px) clamp(18px, 5.5cqw, 30px) clamp(22px, 6cqw, 30px);
+  overflow: hidden;
+}
+
+.certificate--wine .certificate-inner {
+  background: #F2E8D5;
+  border: 1px solid rgba(184, 115, 51, 0.4);
+  border-radius: 4px;
+}
+
+.certificate--fire .certificate-inner {
+  background: #C9BFB5;
+  border: 1px solid rgba(255, 138, 61, 0.4);
+}
+
+.certificate-grain {
+  position: absolute;
+  inset: 0;
+  opacity: 0.5;
+  mix-blend-mode: multiply;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.35'/%3E%3C/svg%3E");
+}
+
+.certificate-bg-art {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  opacity: 0.28;
+  mix-blend-mode: multiply;
+  pointer-events: none;
+}
+
+.certificate-corner {
+  position: absolute;
+  width: 22px;
+  height: 22px;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.certificate-corner--tl { top: 6px; left: 6px; border-top: 2px solid var(--cert-accent); border-left: 2px solid var(--cert-accent); }
+.certificate-corner--tr { top: 6px; right: 6px; border-top: 2px solid var(--cert-accent); border-right: 2px solid var(--cert-accent); }
+.certificate-corner--bl { bottom: 6px; left: 6px; border-bottom: 2px solid var(--cert-accent); border-left: 2px solid var(--cert-accent); }
+.certificate-corner--br { bottom: 6px; right: 6px; border-bottom: 2px solid var(--cert-accent); border-right: 2px solid var(--cert-accent); }
+
+.certificate--wine .certificate-corner { border-radius: 2px; }
+
+.certificate-header {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+}
+
+.certificate-title {
+  margin: 0;
+  font-size: clamp(19px, 8.5cqw, 29px);
+  line-height: 1.15;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  color: var(--cert-accent);
+  overflow-wrap: break-word;
+}
+
+.certificate--wine .certificate-title { font-style: italic; }
+.certificate--fire .certificate-title { text-transform: uppercase; letter-spacing: 0.04em; }
+
+.certificate-subtitle {
+  margin: 6px 0 0;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(12px, 3.6cqw, 15px);
+  opacity: 0.85;
+}
+
+.certificate--wine .certificate-subtitle { color: #2C1810; }
+.certificate--fire .certificate-subtitle { color: #3D3835; }
+
+.certificate-rule {
+  position: relative;
+  z-index: 1;
+  height: 1px;
+  margin: 16px 0;
+  background: var(--cert-accent);
+  opacity: 0.55;
+}
+
+.certificate-rule--ornament {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  height: auto;
+  background: none;
+  opacity: 1;
+}
+
+.certificate-rule--ornament span {
+  flex: 1;
+  height: 1px;
+  background: var(--cert-accent);
+  opacity: 0.55;
+}
+
+.certificate-rule--ornament em {
+  font-style: normal;
+  color: var(--cert-accent);
+  font-size: 13px;
+}
+
+.certificate-eyebrow {
+  display: block;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(9px, 2.6cqw, 10.5px);
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--cert-accent);
+  margin-bottom: 6px;
+}
+
+.certificate--fire .certificate-eyebrow {
+  font-family: Oswald, sans-serif;
+  font-weight: 500;
+}
+
+.certificate-notes {
+  position: relative;
+  z-index: 1;
+  margin-top: 18px;
+  text-align: left;
+}
+
+.certificate-notes p {
+  margin: 0;
+  font-family: 'EB Garamond', serif;
+  font-size: clamp(12.5px, 3.4cqw, 14.5px);
+  line-height: 1.55;
+}
+
+.certificate--wine .certificate-notes p { color: #2C1810; }
+.certificate--fire .certificate-notes p { color: #3D3835; }
+
+.certificate-stats {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: stretch;
+  gap: 16px;
+  margin-top: 18px;
+}
+
+.certificate-stat {
+  flex: 1;
+  min-width: 0;
+  text-align: left;
+}
+
+.certificate-stat p {
+  margin: 0;
+  font-family: 'EB Garamond', serif;
+  font-size: clamp(11.5px, 3.1cqw, 13.5px);
+  line-height: 1.4;
+}
+
+.certificate--wine .certificate-stat p { color: #2C1810; }
+.certificate--fire .certificate-stat p { color: #3D3835; }
+
+.certificate-stat-divider {
+  width: 1px;
+  align-self: stretch;
+  background: var(--cert-accent);
+  opacity: 0.3;
+}
+
+.certificate-footer {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-top: 20px;
+}
+
+.certificate-footer-text {
+  text-align: left;
+}
+
+.certificate-year {
+  margin: 0;
+  font-family: 'Cormorant Garamond', serif;
+  font-weight: 700;
+  font-size: clamp(16px, 4.5cqw, 20px);
+  letter-spacing: 0.06em;
+  color: var(--cert-accent);
+}
+
+.certificate--fire .certificate-year { font-family: Cinzel, serif; }
+
+.certificate-seal {
+  flex-shrink: 0;
+  width: clamp(46px, 13cqw, 60px);
+  height: clamp(46px, 13cqw, 60px);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.certificate-seal.wax-seal {
+  background: radial-gradient(circle at 35% 30%, color-mix(in srgb, var(--cert-accent) 85%, white 15%), var(--cert-accent) 70%);
+  box-shadow: inset 0 2px 4px rgba(255, 255, 255, 0.35), inset 0 -4px 8px rgba(0, 0, 0, 0.35), 0 6px 14px rgba(0, 0, 0, 0.45);
+}
+
+.certificate-seal.ember-seal {
+  background: radial-gradient(circle at 35% 30%, color-mix(in srgb, var(--cert-accent) 70%, white 10%), color-mix(in srgb, var(--cert-accent) 60%, black 30%) 75%);
+  border: 2px solid rgba(255, 138, 61, 0.6);
+  box-shadow: 0 0 18px 2px rgba(255, 138, 61, 0.35), inset 0 -4px 8px rgba(0, 0, 0, 0.4);
+}
+
+.certificate-seal-mark {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(12px, 3.4cqw, 15px);
+  font-weight: 700;
+  color: #F2E8D5;
+}
+
+.certificate--fire .certificate-seal-mark {
+  color: #1A1512;
+  font-size: clamp(14px, 4cqw, 18px);
+}
+
+.certificate-closer {
+  position: relative;
+  z-index: 1;
+  margin: 16px 0 0;
+  font-family: 'EB Garamond', serif;
+  font-style: italic;
+  font-size: clamp(11.5px, 3cqw, 13px);
+  text-align: center;
+  opacity: 0.75;
+}
+
+.certificate--wine .certificate-closer { color: #2C1810; }
+.certificate--fire .certificate-closer { color: #3D3835; }
+
+@media (prefers-reduced-motion: reduce) {
+  .certificate-seal { animation: none !important; }
+}
+
+[data-motion="reduced"] .certificate-seal {
+  animation: none !important;
+}
+
+/* ---------- Result controls ---------- */
+
+.artifact-controls {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 4px;
+}
+
+.control-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  padding: 13px 22px;
+  font-family: Inter, sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: transform 0.18s ease, background 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
+}
+
+.control-btn svg {
+  flex-shrink: 0;
+}
+
+.control-btn--secondary {
+  background: rgba(0, 0, 0, 0.32);
+  border: 1px solid color-mix(in srgb, var(--btn-accent) 45%, transparent);
+}
+
+.control-btn--secondary:hover {
+  background: rgba(0, 0, 0, 0.48);
+  border-color: var(--btn-accent);
+  transform: translateY(-1px);
+}
+
+.control-btn--primary {
+  background: linear-gradient(155deg,
+    color-mix(in srgb, var(--btn-accent) 88%, white 12%),
+    var(--btn-accent) 60%,
+    color-mix(in srgb, var(--btn-accent) 82%, black 18%));
+  border: 1px solid color-mix(in srgb, var(--btn-accent) 60%, black 10%);
+  color: var(--btn-ink);
+  box-shadow: 0 8px 20px -6px color-mix(in srgb, var(--btn-accent) 65%, transparent);
+}
+
+.control-btn--primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 12px 26px -6px color-mix(in srgb, var(--btn-accent) 75%, transparent);
+}
+
+.control-btn--primary:active,
+.control-btn--secondary:active {
+  transform: translateY(0);
+}
+
+.control-btn:focus-visible {
+  outline: 2px solid var(--btn-accent);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .control-btn {
+    transition: none !important;
+  }
+}
+
+[data-motion="reduced"] .control-btn {
+  transition: none !important;
 }

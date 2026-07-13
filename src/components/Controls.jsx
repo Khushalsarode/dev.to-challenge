@@ -1,7 +1,9 @@
 import { VESSELS } from '../config/vessels';
 import { downloadLabel } from '../utils/download';
 import { buildTwitterShareUrl } from '../utils/share';
-import { IconReplay, IconDownload, IconShare, IconReset } from './icons/Icons';
+import {
+  IconVolume, IconDownload, IconShare, IconReset,
+} from './icons/Icons';
 
 function Controls({
   vessel, passion, labelData, audioUrl, volume = 0.45, labelRef, compositeRef, onReset,
@@ -24,51 +26,41 @@ function Controls({
     window.open(url, '_blank', 'noopener,noreferrer');
   }
 
-  const buttonStyle = {
-    fontFamily: 'Inter',
-    fontWeight: 500,
-    fontSize: 16,
-    padding: '12px 18px',
-    border: `1px solid ${v.accentUi}`,
-    borderRadius: 0,
-    background: 'transparent',
-    color: v.parchment,
-    display: 'inline-flex',
-    alignItems: 'center',
-    gap: 8,
-    letterSpacing: '0.03em',
-  };
-
   return (
-    <div
-      className="artifact-controls"
-      style={{
-        position: 'relative',
-        zIndex: 1,
-        display: 'flex',
-        gap: 12,
-        flexWrap: 'wrap',
-        justifyContent: 'center',
-        marginTop: 8,
-      }}
-    >
+    <div className="artifact-controls">
       {audioUrl && (
-        <button type="button" style={buttonStyle} onClick={handleReplay}>
-          <IconReplay />
-          Replay
+        <button
+          type="button"
+          className="control-btn control-btn--secondary"
+          style={{ '--btn-accent': v.accentUi, color: v.parchment }}
+          onClick={handleReplay}
+        >
+          <IconVolume size={16} />
+          Listen again
         </button>
       )}
-      <button type="button" style={buttonStyle} onClick={handleDownload}>
+      <button
+        type="button"
+        className="control-btn control-btn--secondary"
+        style={{ '--btn-accent': v.accentUi, color: v.parchment }}
+        onClick={handleDownload}
+      >
         <IconDownload />
         Download
       </button>
-      <button type="button" style={buttonStyle} onClick={handleShare}>
+      <button
+        type="button"
+        className="control-btn control-btn--secondary"
+        style={{ '--btn-accent': v.accentUi, color: v.parchment }}
+        onClick={handleShare}
+      >
         <IconShare />
         Share
       </button>
       <button
         type="button"
-        style={{ ...buttonStyle, borderColor: `${v.accentUi}66`, opacity: 0.8 }}
+        className="control-btn control-btn--primary"
+        style={{ '--btn-accent': v.accentUi, '--btn-ink': v.bg }}
         onClick={onReset}
       >
         <IconReset />

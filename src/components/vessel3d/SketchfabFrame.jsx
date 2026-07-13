@@ -1,20 +1,39 @@
-import { SKETCHFAB_MODELS, buildSketchfabEmbedUrl } from '../../config/sketchfab';
+import { useEffect, useRef } from 'react';
+import { syncSketchfabWrapper, hideSketchfabWrapper } from './sketchfabIframeCache';
 
-function SketchfabFrame({ vessel, compact = false }) {
-  const model = SKETCHFAB_MODELS[vessel];
-  const src = buildSketchfabEmbedUrl(model.uid, { autospin: 0, backdrop: true });
+function SketchfabFrame({ vessel, compact = false, tint = null }) {
+  const slotRef = useRef(null);
+  const tintRef = useRef(tint);
+  tintRef.current = tint;
+
+  useEffect(() => {
+    const slot = slotRef.current;
+    if (!slot) return undefined;
+    const panel = slot.closest('.vessel-showcase-panel');
+
+    let rafId;
+    function tick() {
+      const rect = slot.getBoundingClientRect();
+      const computed = panel ? window.getComputedStyle(panel) : null;
+      syncSketchfabWrapper(vessel, {
+        rect,
+        opacity: computed?.opacity,
+        filter: computed?.filter,
+        tint: tintRef.current,
+      });
+      rafId = requestAnimationFrame(tick);
+    }
+    tick();
+
+    return () => {
+      cancelAnimationFrame(rafId);
+      hideSketchfabWrapper(vessel);
+    };
+  }, [vessel]);
 
   return (
     <div className={`sketchfab-frame ${compact ? 'sketchfab-frame--compact' : ''}`}>
-      <div className="sketchfab-frame-viewport">
-        <iframe
-          title={vessel === 'wine' ? 'Wine bottle 3D model' : 'Forge anvil 3D model'}
-          src={src}
-          loading="lazy"
-          tabIndex={-1}
-          allow="autoplay; fullscreen; xr-spatial-tracking"
-        />
-      </div>
+      <div className="sketchfab-frame-viewport" ref={slotRef} />
       <div className="sketchfab-frame-mask sketchfab-frame-mask--top" />
       <div className="sketchfab-frame-mask sketchfab-frame-mask--bottom" />
       <div className="sketchfab-frame-mask sketchfab-frame-mask--corner-tl" />

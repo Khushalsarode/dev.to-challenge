@@ -1,6 +1,6 @@
 const VOICE_IDS = {
   wine: 'pNInz6obpgDQGcFmaJgB', // Adam — premade, free tier
-  fire: 'TxGEqnHWrfWFTfGW9XjX', // Josh — premade, free tier
+  fire: 'VR6AewLTigWG4xSOukaG', // Arnold — premade, free tier (Josh is library-only, 402s on free tier)
 };
 
 const VOICE_SETTINGS = {
